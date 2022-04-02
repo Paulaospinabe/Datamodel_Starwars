@@ -16,7 +16,7 @@ class StarWars(Base):
     Characters = Column(String(250), nullable=False)
     Planets = Column(String(250), nullable=False)
     Starships = Column(String(250), nullable=False)
-    Favourites = Column(Integer)
+    Favourites = Column(String(250), nullable=False)
     
 
 class Characters(Base):
@@ -24,12 +24,14 @@ class Characters(Base):
     # Here we define columns for the table address.
     # Notice that each column is also a normal Python instance attribute.
     ID = Column(primary_key=True)
-    Name = Column(String(250), ForeignKey('StarWars.ID'), ForeignKey('Favourites.Characters_Name'))
+    Name = Column(String(250), ForeignKey('StarWars.ID'), ForeignKey('Favourites_Character.ID'))
     Description = Column(String(250), nullable=False)
     Created = Column(String(250), nullable=False)
     Gender = Column(String(250), nullable=False)
     Eye_Color = Column(String(250), nullable=False)
     Hair_Color = Column(String(250), nullable=False)
+    StarWars = relationship(StarWars)
+    
     
 
 class Planets(Base):
@@ -37,11 +39,12 @@ class Planets(Base):
     # Here we define columns for the table address.
     # Notice that each column is also a normal Python instance attribute.
     ID = Column(primary_key=True)
-    Name = Column(String(250), ForeignKey('StarWars.ID'), ForeignKey('Favourites.Planets_Name'))
+    Name = Column(String(250), ForeignKey('StarWars.ID'), ForeignKey('Favourites_Planet.ID'))
     Description = Column(String(250), nullable=False)
     Created = Column(String(250), nullable=False)
     Climate = Column(String(250), nullable=False)
     Terrain = Column(String(250), nullable=False)
+    StarWars = relationship(StarWars)
    
 
 class Starships(Base):
@@ -49,21 +52,41 @@ class Starships(Base):
     # Here we define columns for the table address.
     # Notice that each column is also a normal Python instance attribute.
     ID = Column(primary_key=True)
-    Model = Column(String(250), ForeignKey('StarWars.ID'), ForeignKey('Favourites.Starships_Name'))
+    Model = Column(String(250), ForeignKey('StarWars.ID'), ForeignKey('Favourites_Starship.ID'))
     Description = Column(String(250), nullable=False)
     Starship_Class = Column(String(250), nullable=False)
     Manufacturer = Column(String(250), nullable=False)
     Max_Atmosphering_Speed = Column(String(250), nullable=False)
+    StarWars = relationship(StarWars)
    
 
-class Favourites(Base):
-    __tablename__ = 'Favourites'
+class Favourites_Character(Base):
+    __tablename__ = 'Favourites_Character'
     # Here we define columns for the table address.
     # Notice that each column is also a normal Python instance attribute.
     ID = Column(primary_key=True)
-    Characters_Name = Column(String(250), nullable=False)
-    Planets_Name = Column(String(250), nullable=False)
-    Starships_Name = Column(String(250), nullable=False)
+    Character_Name = Column(String(250), ForeignKey('Characters.ID'), ForeignKey('StarWars.ID'))
+    Characters = relationship(Characters)
+    StarWars = relationship(StarWars)
+
+class Favourites_Planet(Base):
+    __tablename__ = 'Favourites_Planet'
+    # Here we define columns for the table address.
+    # Notice that each column is also a normal Python instance attribute.
+    ID = Column(primary_key=True)
+    Planet_Name = Column(String(250), ForeignKey('Planets.ID'), ForeignKey('StarWars.ID'))
+    Planets = relationship(Planets)
+    StarWars = relationship(StarWars)
+
+class Favourites_Starship(Base):
+    __tablename__ = 'Favourites_Starship'
+    # Here we define columns for the table address.
+    # Notice that each column is also a normal Python instance attribute.
+    ID = Column(primary_key=True)
+    Starship_Name = Column(String(250), ForeignKey('Starships.ID'), ForeignKey('StarWars.ID'))
+    Starships = relationship(Starships)
+    StarWars = relationship(StarWars)
+
    
     
 
